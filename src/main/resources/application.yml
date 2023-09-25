@@ -1,0 +1,26 @@
+server:
+  port: 8090
+
+spring:
+  profiles:
+    active: local,dev,tst,pre,pro
+  datasource:
+    url: jdbc:h2:mem:inditexdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+    initialization-mode: always
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: true
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+    web:
+      allow-others: true
