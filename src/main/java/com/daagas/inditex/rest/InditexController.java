@@ -1,5 +1,7 @@
 package com.daagas.inditex.rest;
 
+import com.daagas.inditex.Exceptions.InvalidRequestException;
+import com.daagas.inditex.Exceptions.ResourceNotFoundException;
 import com.daagas.inditex.model.Product;
 import com.daagas.inditex.model.ProductRequest;
 import com.daagas.inditex.model.ProductResponse;
@@ -24,9 +26,24 @@ public class InditexController {
             @RequestBody ProductRequest product
     ) {
 
-        Product responseProduct = inditexService.getProduct(product.getDate(),
+        if (product.getProductId() == null || product.getBrandId() == null) {
+            throw new InvalidRequestException("Los parámetros productId y brandId son obligatorios.");
+        }
+
+        Product responseProduct = new Product();
+
+        try {
+            responseProduct = inditexService.getProduct(product.getDate(),
                 product.getProductId(),
                 product.getBrandId());
+        } catch (Exception e) {
+            throw new RuntimeException("Ocurrió un error interno en el servidor", e);
+        }
+        
+
+        if (responseProduct == null) {
+            throw new ResourceNotFoundException("Producto no encontrado para productId: " + product.getProductId() + " y brandId: " + product.getBrandId());
+        }
 
         ProductResponse response = new ProductResponse(
                 responseProduct.getProductId(),
@@ -35,7 +52,7 @@ public class InditexController {
                 responseProduct.getStartDate(),
                 responseProduct.getEndDate(),
                 responseProduct.getPrice()
-        );
+        );        
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
