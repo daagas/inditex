@@ -65,4 +65,4 @@ Sourcetree
 
 ## Créditos
 
-La oportunidad fue comunicada por Jorge Nieto de BCNC Consulting Group.
+Código desarrollado por mi en base al documento de la prueba.
